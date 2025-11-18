@@ -38,4 +38,4 @@ if valor >= 2:  #Caso sobre valor ou seja menor que 5, divide por esse e o resul
   valor %= 2
 
 if valor % 2 == 1:  #Caso sobre valor ou seja menor que 2, não terá como fazer a operação!
-  print(f'\nSobrou R$ {valor} pois não temos cédulas desse valor!')
+  print(f'\nSobrou R$ {valor} pois não temos cédulas desse valor!\n')
