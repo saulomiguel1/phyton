@@ -103,7 +103,6 @@ while True:
     else:
         print('Digite uma função válida.')
 
-            
-            
+   
 
 
