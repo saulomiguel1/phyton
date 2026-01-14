@@ -1,5 +1,6 @@
 import os
 import time
+import random
 
 def limparTela():
     os.system("cls")
@@ -10,7 +11,7 @@ def mostrarTabuleiro(tabuleiro):
     for i in range(3):
         print("\t|", end="")
         for j in range(3):
-            print(f"{tabuleiro[i][j]} |", end="")
+            print(f" {tabuleiro[i][j]} |", end="")
         print("\n\t+---+---+---+")
 
 def trocarJogador(jogador):
@@ -75,6 +76,58 @@ print("Bem vindo ao JOGO DA VELHA!")
 
 jogador1 = input("Nome do jogador que usará o X: ")
 jogador2 = input("Nome do jogador que usará o O: ")
+
+pontos = {jogador1: 0, jogador2: 0}
+
+continuar = True 
+
+while continuar:
+    sorteio = random.sample("XO",1)
+    tabuleiro = criarTabuleiro()
+    jogadorAtual = sorteio[0]
+
+    while True: 
+        limparTela()
+        mostrarPlacar(jogador1, jogador2, pontos)
+        mostrarTabuleiro(tabuleiro)
+        
+        if jogadorAtual == "X":
+            nomeAtual = jogador1
+        else:
+            nomeAtual = jogador2
+
+        try:
+            posicao = int(input(f"\n{nomeAtual} [{jogadorAtual}], escolha sua posição (1/9): "))
+
+            if not jogar(tabuleiro, jogadorAtual, posicao):
+                print("Jogada Inválida! Tente novamente.")
+                time.sleep(1)
+                continue
+        except ValueError:
+            print("Digite apenas números!")
+            time.sleep(1)
+            continue
+
+        if verificarVitoria(tabuleiro):
+            limparTela()
+            mostrarTabuleiro(tabuleiro)
+            print(f"\n {nomeAtual} venceu!")
+            pontos[nomeAtual] += 1
+            break
+
+        if verificarEmpate(tabuleiro):
+            limparTela()
+            mostrarTabuleiro(tabuleiro)
+            print("\nEmpate! Ninguém venceu.")
+
+        jogadorAtual = trocarJogador(jogadorAtual)
+    resposta = input("Deseja jogar novamente?(s/n)").lower()
+    if resposta != "s":
+        continuar = False
+
+    limparTela()
+    mostrarPlacar(jogador1, jogador2, pontos)
+    print("Obrigado por jogar!!!")
 
 
 

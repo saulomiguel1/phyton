@@ -88,10 +88,53 @@ def mostrar_placar(jogador1, jogador2, pontos):
     print(f"{jogador2}: {pontos[jogador2]} vitória(s)")
     print("-" * 25)
 
+#-------------------------------------------------------------------------------------------------
 
-# -------------------------------
-# PROGRAMA PRINCIPAL
-# -------------------------------
+def carregar_ranking():
+    ranking = {}
+
+    try:
+        arquivo = open("ranking.txt", "r")
+
+        for linha in arquivo:
+            nome, vitorias = linha.strip().split(";")
+            ranking[nome] = int(vitorias)
+
+        arquivo.close()
+
+    except FileNotFoundError:
+        ranking = {}
+
+    return ranking
+
+
+def salvar_ranking(ranking):
+    arquivo = open("ranking.txt", "w")
+
+    for nome in ranking:
+        arquivo.write(f"{nome};{ranking[nome]}\n")
+
+    arquivo.close()
+
+
+def atualizar_ranking(ranking, vencedor):
+    if vencedor in ranking:
+        ranking[vencedor] += 1
+    else:
+        ranking[vencedor] = 1
+
+
+def mostrar_ranking(ranking):
+    print("\n🏆 RANKING GERAL 🏆")
+
+    ranking_ordenado = sorted(ranking.items(), key=lambda item: item[1], reverse=True)
+
+    for nome, vitorias in ranking_ordenado:
+        print(f"{nome}: {vitorias} vitória(s)")
+
+#-------------------------------------------------------------------------------------------------
+
+ranking = carregar_ranking()
 
 limpar_tela()
 print("🎮 Bem-vindo ao Jogo da Velha!\n")
@@ -104,16 +147,18 @@ pontos = {jogador1: 0, jogador2: 0}
 continuar = True
 
 while continuar:
-    sorteio = random.sample("XO",1)
     tabuleiro = criar_tabuleiro()
-    jogador_atual = sorteio[0]
+    jogador_atual = "X"
 
     while True:
         limpar_tela()
         mostrar_placar(jogador1, jogador2, pontos)
         mostrar_tabuleiro(tabuleiro)
 
-        nome_atual = jogador1 if jogador_atual == "X" else jogador2
+        if jogador_atual == "X":
+            nome_atual = jogador1
+        else:
+            nome_atual = jogador2
 
         try:
             posicao = int(input(f"\n{nome_atual} [{jogador_atual}], escolha uma posição (1-9): "))
@@ -132,7 +177,11 @@ while continuar:
             limpar_tela()
             mostrar_tabuleiro(tabuleiro)
             print(f"\n🏆 {nome_atual} venceu!")
+
             pontos[nome_atual] += 1
+            atualizar_ranking(ranking, nome_atual)
+            salvar_ranking(ranking)
+
             break
 
         if verificar_empate(tabuleiro):
@@ -149,4 +198,6 @@ while continuar:
 
 limpar_tela()
 mostrar_placar(jogador1, jogador2, pontos)
-print("🎯 Obrigado por jogar!")
+mostrar_ranking(ranking)
+
+print("\n🎯 Obrigado por jogar!")
