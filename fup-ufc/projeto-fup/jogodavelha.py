@@ -35,14 +35,13 @@ def verificarVitoria(tabuleiro):
             return True
     #Pela vertical
     for j in range(3):
-        if tabuleiro[0][i] == tabuleiro[1][i] == tabuleiro[2][i]:
+        if tabuleiro[0][j] == tabuleiro[1][j] == tabuleiro[2][j]:
             return True
     #Pela diagonal
     if tabuleiro[0][0] == tabuleiro[1][1] == tabuleiro[2][2]:
         return True
     if tabuleiro[0][2] == tabuleiro[1][1] == tabuleiro[2][0]:
         return True    
-    #Deu velha
     return False
 
 def verificarEmpate(tabuleiro):
@@ -119,9 +118,10 @@ while continuar:
             limparTela()
             mostrarTabuleiro(tabuleiro)
             print("\nEmpate! Ninguém venceu.")
+            break
 
         jogadorAtual = trocarJogador(jogadorAtual)
-    resposta = input("Deseja jogar novamente?(s/n)").lower()
+    resposta = input("Deseja jogar novamente?(s/n) ").lower()
     if resposta != "s":
         continuar = False
 
